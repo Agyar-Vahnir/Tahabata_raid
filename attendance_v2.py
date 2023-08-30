@@ -8,21 +8,27 @@ import clear_text
 def people_attending(playerlist, log, output_file, write=True):
     check = True
     print("Loading: " + log)
-    if not check_people.check_new_people(playerlist,log):
+    if not check_people.check_new_people(playerlist,log): #Check if all characters are already registered
         check = False
     if check:
-        with open(playerlist) as playerdatabase:
+
+        ## Load the player database
+        with open(playerlist) as playerdatabase: 
             playersdb = csv.DictReader(playerdatabase, delimiter=";",skipinitialspace=True)
             playersdic = list(playersdb)
             # print(playersdic)
+        
+        ## Load the players in the logs
         logplayers = []
-        with open(log) as newlog: 
+        with open(log) as newlog:
             it_players = csv.reader(newlog,delimiter=" ",skipinitialspace=False)
             for p in it_players:
                 logplayers.append(p[0])
-        logplayers = list(dict.fromkeys(logplayers))
+        logplayers = list(dict.fromkeys(logplayers)) # Delete duplicates
         elyos = np.zeros(8)
         asmos = np.zeros(8)
+
+        ## Count the players and update the list
         for player in playersdic:
             if player["Name"] in logplayers:
                 if player["Faction"] == "Elyos":
@@ -44,6 +50,8 @@ def people_attending(playerlist, log, output_file, write=True):
                     elif  player["Class"] == "Cleric": asmos[6] += 1
                     elif  player["Class"] == "Chanter": asmos[7] += 1
         print("\n ATTENDING")
+
+        ## Put the results in a csv file
         attending =[elyos,asmos]
         faction = ["Elyos","Asmos"]
         classes = ["Assassin", "Ranger", "Gladiator", "Templar", "Spiritmaster", "Sorcerer", "Cleric", "Chanter"]
