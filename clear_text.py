@@ -34,6 +34,3 @@ def remove_text_until_colon(text):
 def replace_commas_with_newlines(text):
     return text.replace(', ', '\n')
 
-# Appel de la fonction pour un dossier donné
-folder_path = '07-30-U'
-process_files_in_folder(folder_path)
